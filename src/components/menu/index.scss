@@ -3,7 +3,7 @@
     flex-direction: column;
 
 
-
+    
     min-height: 100vh;
 
     padding: 20px 0px;
@@ -40,26 +40,35 @@
 
         a{
             display: flex;
-            justify-content: center;
             align-items: center;
+
+            padding-left: 20px;
 
             text-decoration: none;
 
             color: #fff;
 
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 600;
 
             width: 100%;
             height: 80px;
 
             transition: 0.5s;
+
+            img{
+                margin-right: 10px;
+            }
         }
 
         a:hover{
             background-color:rgba(136, 55, 199, 1);
 
 
+        }
+
+        .selecionado{
+            background-color: #8837C7;
         }
     }
 
