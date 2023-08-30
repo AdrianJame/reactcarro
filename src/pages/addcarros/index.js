@@ -6,28 +6,32 @@ import axios from 'axios';
 function Veiculos() {
   const[tipos, setTipos] = useState([]);
 
-  const[Modelo, setModelo] = useState('');
-  const[Marca, setMarca] = useState('');
-  const[ano, setAno] = useState(0);
-  const[placa, setPlaca] = useState(0);
+  const[modelo, setModelo] = useState('');
+  const[marca, setMarca] = useState('');
+  const[ano, setAno] = useState('');
+  const[placa, setPlaca] = useState('');
+  const[tiposelecionado, setTiposelecionado] = useState('');
 
-  const[erro, setErro] = useState();
+  const[erro, setErro] = useState('');
 
   async function Salvar(){
     
     try{
       let veiculos ={
-        idtipoveiculo: tipos,
-        modelo: Modelo,
-        marca: Marca,
+        tipo: tiposelecionado,
+        nome: modelo,
+        fabricante: marca,
         ano: ano,
         placa: placa
       }
 
       let r = await axios.post('http://localhost:5000/veiculo', veiculos)
-    }
-    catch{
 
+
+      setErro('Veiculo cadastrado')
+    }
+    catch(err){
+      setErro(err.response.data.erro)
     }
   }
 
@@ -62,35 +66,39 @@ function Veiculos() {
 
             <div className='secao2-inputs'>
               <b>Tipo</b>
-              <select>
+              <select value={tiposelecionado}  onChange={e => setTiposelecionado(e.target.value)}>
                 <option>Selecione</option>
                 {tipos.map(item => 
-                  <option value={item.id}>{item.nm_tipo_carro}</option>
+                  <option value={item.id_tipo_carro}>{item.nm_tipo_carro}</option>
                 )}
               </select>
             </div>
 
             <div className='secao2-inputs'>
               <b>Modelo</b>
-              <input type='text' placeholder='Civc type r'/>
+              <input type='text' placeholder='Civc type r' value={modelo} onChange={e => setModelo(e.target.value)}/>
             </div>
 
             <div className='secao2-inputs'>
               <b>Marca</b>
-              <input type='text' placeholder='Honda'/>
+              <input type='text' placeholder='Honda' value={marca} onChange={e => setMarca(e.target.value)}/>
             </div>
 
             <div className='secao2-inputs'>
               <b>Ano</b>
-              <input type='number' placeholder='2023'/>
+              <input type='number' placeholder='2023' value={ano} onChange={e => setAno(e.target.value)}/>
             </div>
 
             <div className='secao2-inputs'>
               <b>Placa</b>
-              <input type='number' placeholder='abc-123'/>
+              <input type='text' placeholder='abc-123' value={placa} onChange={e => setPlaca(e.target.value)}/>
             </div>
 
-            <button>Salvar</button>
+            <div>
+              <p>{erro}</p>
+            </div>
+
+            <button onClick={Salvar}>Salvar</button>
           </section>
 
             <section className='secao2-lista'>
