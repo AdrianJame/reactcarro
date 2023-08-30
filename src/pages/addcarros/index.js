@@ -1,7 +1,47 @@
 import './index.scss';
 import Menu from '../../components/menu';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function Veiculos() {
+  const[tipos, setTipos] = useState([]);
+
+  const[Modelo, setModelo] = useState('');
+  const[Marca, setMarca] = useState('');
+  const[ano, setAno] = useState(0);
+  const[placa, setPlaca] = useState(0);
+
+  const[erro, setErro] = useState();
+
+  async function Salvar(){
+    
+    try{
+      let veiculos ={
+        idtipoveiculo: tipos,
+        modelo: Modelo,
+        marca: Marca,
+        ano: ano,
+        placa: placa
+      }
+
+      let r = await axios.post('http://localhost:5000/veiculo', veiculos)
+    }
+    catch{
+
+    }
+  }
+
+  async function ListarTipos(){
+    let r = await axios.get('http://localhost:5000/tipo')
+    setTipos(r.data);
+  }
+
+
+  useEffect(() => {
+    ListarTipos()
+  }, [])
+
+
   return (
     <div className="CadastroVeiculo">
       <Menu selecionado='carro' />
@@ -22,12 +62,17 @@ function Veiculos() {
 
             <div className='secao2-inputs'>
               <b>Tipo</b>
-              <input type='text' placeholder='Carro'/>
+              <select>
+                <option>Selecione</option>
+                {tipos.map(item => 
+                  <option value={item.id}>{item.nm_tipo_carro}</option>
+                )}
+              </select>
             </div>
 
             <div className='secao2-inputs'>
               <b>Modelo</b>
-              <input type='email' placeholder='Civc type r'/>
+              <input type='text' placeholder='Civc type r'/>
             </div>
 
             <div className='secao2-inputs'>
@@ -55,7 +100,7 @@ function Veiculos() {
                 <b>Modelo, marca, placa</b>
 
                 <section className='inputcomlupa'>
-                  <input type='text' placeholder='Civc'/> 
+                  <input type='text' placeholder='Civic'/> 
                   <img src='/assets/images/lupa.svg'/>
                 </section>
               </div>
