@@ -6,9 +6,10 @@
     .area-administrativa{
         display: flex;
         flex-direction: column;
-        width: 100%;
 
         background-color: #f6f6f6;
+
+        width: 100%;
 
         .area-administrativa-cabe{
             display: flex;
@@ -23,8 +24,6 @@
             padding: 0px 20px;
 
             height: 8vh;
-            
-            width: 100%;
 
             margin-bottom: 50px;
 
@@ -169,6 +168,12 @@
 
                             height: 30px;
                         }
+
+                        .inputcomlupa-button{
+                            background-color: transparent;
+                            border: none;
+                            cursor: pointer;
+                        }
                     }
             }
 
@@ -193,11 +198,42 @@
                     color: #747474;
 
                     .secao2-lista-Nome{
-                        margin-right: 300px;
+                        margin-right: 80px;
                     }
 
                     b{
-                        margin-right: 150px;
+                        margin-right: 120px;
+                        width: 60px;
+                    }
+                }
+
+                .buscarveiculo{
+                    display: flex;
+                    flex-direction: row;
+                    padding: 20px;
+
+                    border-radius: 8px;
+                    border: 2px solid #D4D4D4;
+
+                    margin-bottom: 10px;
+
+                    p{
+                        font-size: 20px;
+                        
+                        width: 80px;
+
+                        margin-right: 100px;
+                    }
+
+                    .p_nome{
+                        width: 97px;
+                        margin-right: 40px;
+                    }
+
+                    img{
+                        height: 30px;
+
+                        cursor: pointer;
                     }
                 }
             }

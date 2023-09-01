@@ -3,8 +3,12 @@ import Menu from '../../components/menu';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+
 function Veiculos() {
   const[tipos, setTipos] = useState([]);
+  const[buscar, setBuscar] = useState([]);
 
   const[modelo, setModelo] = useState('');
   const[marca, setMarca] = useState('');
@@ -12,7 +16,19 @@ function Veiculos() {
   const[placa, setPlaca] = useState('');
   const[tiposelecionado, setTiposelecionado] = useState('');
 
+  const[id, setId] = useState(0);
+
+
   const[erro, setErro] = useState('');
+
+  function alterarVeiculo(item) {
+    setModelo(item.modelo);
+    setPlaca(item.placa);
+    setMarca(item.marca);
+    setAno(item.ano);
+    setTiposelecionado(item.idTipoVeiculo);
+    setId(item.id);
+  }
 
   async function Salvar(){
     
@@ -25,15 +41,54 @@ function Veiculos() {
         placa: placa
       }
 
-      let r = await axios.post('http://localhost:5000/veiculo', veiculos)
+      if(id == 0){
+        let r = await axios.post('http://localhost:5000/veiculo', veiculos)
+        setErro('Veiculo cadastrado')
+      }
+      else{
+        let r = await axios.post('http://localhost:5000/veiculo', veiculos)
+        setErro('Veiculo cadastrado')
+      }
 
+      Buscarveiculos()
+      Limpar()
 
-      setErro('Veiculo cadastrado')
     }
     catch(err){
       setErro(err.response.data.erro)
     }
   }
+
+  async function Limpar(){
+    setModelo('')
+    setMarca('')
+    setAno('')
+    setPlaca('')
+    setTiposelecionado(0)
+    setId(0)
+  }
+
+  async function Deletar(id){
+    confirmAlert({
+      title: 'VEÍCULOS',
+      message: 'Tem certeza que deseja remover?',
+      buttons: [
+        {
+          label: 'Sim',
+          onClick: async () => {
+            let r = await axios.delete('http://localhost:5000/veiculo/' + id);
+            alert('Veículo foi removido com sucesso');
+            Buscarveiculos();
+          }
+        },
+        {
+          label: 'Não'
+        }
+      ]
+    });
+    
+  } 
+
 
   async function ListarTipos(){
     let r = await axios.get('http://localhost:5000/tipo')
@@ -45,6 +100,12 @@ function Veiculos() {
     ListarTipos()
   }, [])
 
+
+
+  async function Buscarveiculos(){
+    let r = await axios.get('http://localhost:5000/veiculo/tudo')
+    setBuscar(r.data);
+  }
 
   return (
     <div className="CadastroVeiculo">
@@ -98,7 +159,9 @@ function Veiculos() {
               <p>{erro}</p>
             </div>
 
-            <button onClick={Salvar}>Salvar</button>
+            <button onClick={Salvar}>
+                  {id == 0 ? 'Salvar' : 'Alterar'}
+              </button>
           </section>
 
             <section className='secao2-lista'>
@@ -109,20 +172,35 @@ function Veiculos() {
 
                 <section className='inputcomlupa'>
                   <input type='text' placeholder='Civic'/> 
-                  <img src='/assets/images/lupa.svg'/>
+                  <button onClick={Buscarveiculos} className='inputcomlupa-button'>
+                    <img src='/assets/images/lupa.svg'/>
+                  </button>
                 </section>
               </div>
 
               <div className='secao2-lista-titulos'>
-                <b className='secao2-lista-Nome'>Nome</b>
+                <b className='secao2-lista-Nome'>Modelo</b>
 
-                <b>CPF</b>
+                <b>Marca</b>
 
-                <b>telefone</b>
+                <b>Ano</b>
 
-                <b>Email</b>
+                <b>Tipo</b>
+
+                <b>Placa</b>
               </div>
 
+                  {buscar.map(item =>
+                    <div className='buscarveiculo'>
+                      <p className='p_nome'>{item.nm_modelo}</p>
+                      <p>{item.nm_fabricante}</p>
+                      <p>{item.nm_tipo_carro}</p>
+                      <p>{item.nr_ano}</p>
+                      <p>{item.ds_placa}</p>
+                      <img onClick={() => alterarVeiculo(item)} src='/assets/images/editar.png'/>
+                      <img onClick={() => Deletar(item.id)} src='/assets/images/lixeira.png'/>
+                    </div>
+                  )}
             </section>
 
             
