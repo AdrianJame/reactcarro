@@ -22,12 +22,12 @@ function Veiculos() {
   const[erro, setErro] = useState('');
 
   function alterarVeiculo(item) {
-    setModelo(item.modelo);
-    setPlaca(item.placa);
-    setMarca(item.marca);
-    setAno(item.ano);
-    setTiposelecionado(item.idTipoVeiculo);
-    setId(item.id);
+    setModelo(item.nm_modelo);
+    setPlaca(item.ds_placa);
+    setMarca(item.nm_fabricante);
+    setAno(item.nr_ano);
+    setTiposelecionado(item.id_tipo_carro);
+    setId(item.id_carro);
   }
 
   async function Salvar(){
@@ -46,8 +46,8 @@ function Veiculos() {
         setErro('Veiculo cadastrado')
       }
       else{
-        let r = await axios.post('http://localhost:5000/veiculo', veiculos)
-        setErro('Veiculo cadastrado')
+        let r = await axios.put('http://localhost:5000/veiculo/' + id, veiculos)
+        setErro('Veiculo alterado')
       }
 
       Buscarveiculos()
@@ -194,11 +194,11 @@ function Veiculos() {
                     <div className='buscarveiculo'>
                       <p className='p_nome'>{item.nm_modelo}</p>
                       <p>{item.nm_fabricante}</p>
-                      <p>{item.nm_tipo_carro}</p>
                       <p>{item.nr_ano}</p>
+                      <p>{item.nm_tipo_carro}</p>
                       <p>{item.ds_placa}</p>
                       <img onClick={() => alterarVeiculo(item)} src='/assets/images/editar.png'/>
-                      <img onClick={() => Deletar(item.id)} src='/assets/images/lixeira.png'/>
+                      <img onClick={() => Deletar(item.id_carro)} src='/assets/images/lixeira.png'/>
                     </div>
                   )}
             </section>
